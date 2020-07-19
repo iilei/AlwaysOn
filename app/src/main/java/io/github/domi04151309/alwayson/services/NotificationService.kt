@@ -7,6 +7,7 @@ import android.os.Handler
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import io.github.domi04151309.alwayson.objects.Global
@@ -67,11 +68,12 @@ class NotificationService : NotificationListenerService() {
                 notifications = activeNotifications
                 apps = ArrayList(notifications.size)
                 icons = ArrayList(notifications.size)
+                var string = ""
                 for (notification in notifications) {
+                    string += notification.toString() + "\n\n"
                     if (
                             !notification.isOngoing
                             && !JSON.contains(JSONArray(prefs.getString("blocked_notifications", "[]")), notification.packageName)
-                            && notification.notification.priority <= 0
                     ) {
                         if (notification.notification.flags and Notification.FLAG_GROUP_SUMMARY == 0) count++
                         if (!apps.contains(notification.packageName)) {
@@ -80,6 +82,7 @@ class NotificationService : NotificationListenerService() {
                         }
                     }
                 }
+                Toast.makeText(applicationContext, string, Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Log.e(Global.LOG_TAG, e.toString())
                 count = 0
