@@ -15,9 +15,9 @@
         android:summary="@string/pref_ao_vibration_summary"
         android:title="@string/pref_ao_vibration" />
     <io.github.domi04151309.alwayson.custom.EditIntegerPreference
-        android:defaultValue="2"
+        android:defaultValue="120"
         android:icon="@drawable/ic_speed"
-        android:key="ao_animation_delay"
+        android:key="ao_animation_delay_sec"
         android:summary="@string/pref_ao_animation_delay_summary"
         android:title="@string/pref_ao_animation_delay" />
     <Preference

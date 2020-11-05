@@ -122,7 +122,7 @@
     <string name="pref_ao_glowColor_summary">Changes the color of the glowing edges</string>
     <string name="pref_ao_vibration">Vibration duration (in milliseconds)</string>
     <string name="pref_ao_vibration_summary">Duration the phone vibrates when you double-tap the screen</string>
-    <string name="pref_ao_animation_delay">Animation delay (in minutes)</string>
+    <string name="pref_ao_animation_delay">Animation delay (in seconds)</string>
     <string name="pref_ao_animation_delay_summary">Time between the different positions of the content\nWarning: Too high values can cause screen burn-ins!</string>
     <string name="pref_ao_force_brightness">Force a certain brightness on the AOD</string>
     <string name="pref_ao_force_brightness_summary">Tap to change the forced brightness</string>

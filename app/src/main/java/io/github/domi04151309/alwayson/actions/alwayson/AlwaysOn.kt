@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.domi04151309.alwayson.actions.OffActivity
 import io.github.domi04151309.alwayson.R
 import io.github.domi04151309.alwayson.adapters.NotificationGridAdapter
+import io.github.domi04151309.alwayson.helpers.AnimationHelper.animateView
 import io.github.domi04151309.alwayson.helpers.P
 import io.github.domi04151309.alwayson.helpers.Rules
 import io.github.domi04151309.alwayson.helpers.Global
@@ -239,7 +240,7 @@ class AlwaysOn : OffActivity() {
         userPowerSaving = (getSystemService(Context.POWER_SERVICE) as PowerManager).isPowerSaveMode
 
         //Show on lock screen
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
                     WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
@@ -431,7 +432,7 @@ class AlwaysOn : OffActivity() {
         }
 
         //Animation
-        val animationDuration = 10000L
+        /*val animationDuration = 10000L
         val animationScale = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f)
         val animationDelay = (prefs.get("ao_animation_delay", 2) * 60000 + animationDuration * animationScale + 1000).toLong()
         animationThread = object : Thread() {
@@ -447,6 +448,27 @@ class AlwaysOn : OffActivity() {
                         sleep(animationDelay)
                         viewHolder.fullscreenContent.animate().translationY(screenSize / 4).duration = animationDuration
                         if (prefs.get(P.SHOW_FINGERPRINT_ICON, P.SHOW_FINGERPRINT_ICON_DEFAULT)) viewHolder.fingerprintIcn.animate().translationY(0F).duration = animationDuration
+                    }
+                } catch (e: Exception) {
+                    Log.e(Global.LOG_TAG, e.toString())
+                }
+            }
+        }*/
+
+        val animationDelay = (prefs.get("ao_animation_delay_sec", 120) * 1000).toLong()
+        animationThread = object : Thread() {
+            override fun run() {
+                try {
+                    while (viewHolder.fullscreenContent.height == 0) sleep(10)
+                    screenSize = calculateScreenSize()
+                    runOnUiThread { viewHolder.fullscreenContent.translationY = screenSize / 4 }
+                    while (!isInterrupted) {
+                        animateView(viewHolder.fullscreenContent, screenSize / 2, animationDelay)
+                        if (prefs.get(P.SHOW_FINGERPRINT_ICON, P.SHOW_FINGERPRINT_ICON_DEFAULT)) viewHolder.fingerprintIcn.animate().translationY(64F).duration = animationDelay
+                        sleep(animationDelay + 500)
+                        animateView(viewHolder.fullscreenContent, screenSize / 4, animationDelay)
+                        if (prefs.get(P.SHOW_FINGERPRINT_ICON, P.SHOW_FINGERPRINT_ICON_DEFAULT)) viewHolder.fingerprintIcn.animate().translationY(0F).duration = animationDelay
+                        sleep(animationDelay + 500)
                     }
                 } catch (e: Exception) {
                     Log.e(Global.LOG_TAG, e.toString())
